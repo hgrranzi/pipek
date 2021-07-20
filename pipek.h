@@ -17,13 +17,19 @@
 # include <errno.h>
 
 # define ERR_ARGS "Too few arguments\n"
+# define INFILE 0
+# define OUTFILE 1
 
 typedef struct	s_cmd
 {
-	char	*name;
-	char	**args;
-	int		fd[2];
+	char			*name;
+	char			**args;
+	int				fd[2];
+	struct s_cmd	*next;
 
 }				t_cmd;
+
+void	check_args(int argc, char **argv, t_cmd **head_cmd, char **files);
+void	error_and_exit(char *error_message);
 
 #endif
