@@ -29,7 +29,8 @@ typedef struct	s_cmd
 
 }				t_cmd;
 
-void	check_args(int argc, char **argv, t_cmd **head_cmd, char **files);
+void	take_files(int argc, char **argv, char **files);
+void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **envp);
 void	error_and_exit(char *error_message);
 
 #endif
