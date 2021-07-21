@@ -18,6 +18,20 @@ void	error_and_exit(char *error_message)
 	exit(0);
 }
 
+int		index_space(char *str)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		i++;
+		if (str[i] == ' ')
+			break ;
+	}
+	return (i);
+}
+
 char	*take_cmd_path(char *cmd_with_args, char **possible_path)
 {
 	int		i;
@@ -25,14 +39,8 @@ char	*take_cmd_path(char *cmd_with_args, char **possible_path)
 	char	*cmd_name;
 	char	*cmd_path;
 
-	i = 0;
-	while (cmd_with_args[i])
-	{
-		i++;
-		if (cmd_with_args[i] == ' ')
-			break ;
-	}
-	cmd_name = strndup(cmd_with_args, i);
+	cmd_len = index_space(cmd_with_args);
+	cmd_name = strndup(cmd_with_args, cmd_len);
 	if (!cmd_name)
 		error_and_exit(NULL);
 	i = 0;
@@ -53,7 +61,14 @@ char	*take_cmd_path(char *cmd_with_args, char **possible_path)
 
 char	**take_cmd_args(char *cmd_with_args)
 {
-	return (NULL);
+	int		args_start;
+	char	**cmd_args;
+
+	args_start = index_space(cmd_with_args);
+	cmd_args = aka_split(&cmd_with_args[args_start], ' ');
+	if (!cmd_args)
+		error_and_exit(NULL);
+	return (cmd_args);
 }
 
  void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path)
@@ -92,9 +107,11 @@ int	main(int argc, char **argv, char **envp)
 {
 	char	*files[2];
 	t_cmd	*head_cmd;
+	char	**possible_path;
 
 	head_cmd = NULL;
 	take_files(argc, argv, files);
+	possible_path = take_env_path(envp);
 	take_commands(argc, argv, &head_cmd, envp); // instead of envp need a function that takes the PATH and split it
 	return (0);
 }
