@@ -22,7 +22,7 @@
 
 typedef struct	s_cmd
 {
-	char			*name;
+	char			*path;
 	char			**args;
 	int				fd[2];
 	struct s_cmd	*next;

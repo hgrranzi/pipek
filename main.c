@@ -18,19 +18,65 @@ void	error_and_exit(char *error_message)
 	exit(0);
 }
 
- void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **envp)
+char	*take_cmd_path(char *cmd_with_args, char **possible_path)
 {
 	int		i;
-	t_cmd	*current_cmd;
+	int		cmd_len;
+	char	*cmd_name;
+	char	*cmd_path;
+
+	i = 0;
+	while (cmd_with_args[i])
+	{
+		i++;
+		if (cmd_with_args[i] == ' ')
+			break ;
+	}
+	cmd_name = strndup(cmd_with_args, i);
+	if (!cmd_name)
+		error_and_exit(NULL);
+	i = 0;
+	while (possible_path[i])
+	{
+		cmd_path = aka_strjoin(possible_path[i], cmd_name);
+		if (!cmd_path)
+			error_and_exit(NULL);
+		if (access(cmd_path, F_OK))
+			break ;
+		else
+			free(cmd_path); // no need to verify and the last one
+		i++;
+	}
+	free(cmd_name);
+	return (cmd_path);
+}
+
+char	**take_cmd_args(char *cmd_with_args)
+{
+	return (NULL);
+}
+
+ void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path)
+{
+	int		i;
+	t_cmd	*new_cmd;
+	t_cmd	**tail_cmd;
 
 	i = 1;
-	current_cmd = *head_cmd;
+	new_cmd = NULL;
+	tail_cmd = head_cmd;
 	while (++i < argc - 1)
 	{
-		current_cmd = malloc(sizeof(t_cmd));
-		if (!current_cmd)
+		new_cmd = malloc(sizeof(t_cmd));
+		if (!new_cmd)
 			error_and_exit(NULL);
-
+		new_cmd->path = take_cmd_path(argv[i], possible_path);
+		new_cmd->args = take_cmd_args(argv[i]);
+		new_cmd->fd[0] = 0;
+		new_cmd->fd[1] = 1;
+		new_cmd->next = NULL;
+		*tail_cmd = new_cmd;
+		tail_cmd = &new_cmd->next;
 	}
 }
 
@@ -49,6 +95,6 @@ int	main(int argc, char **argv, char **envp)
 
 	head_cmd = NULL;
 	take_files(argc, argv, files);
-	take_commands(argc, argv, &head_cmd, envp);
+	take_commands(argc, argv, &head_cmd, envp); // instead of envp need a function that takes the PATH and split it
 	return (0);
 }
