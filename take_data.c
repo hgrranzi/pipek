@@ -29,7 +29,7 @@ char	*check_cmd_path(char *cmd_name, char **possible_path)
 		cmd_path = aka_strjoin(possible_path[i], cmd_name);
 		if (!cmd_path)
 			error_and_exit(NULL);
-		if (access(cmd_path, F_OK) == 0)
+		if (possible_path[i + 1] == NULL || access(cmd_path, F_OK) == 0)
 			break ;
 		else
 			free(cmd_path);
