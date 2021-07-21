@@ -35,6 +35,21 @@ char	**free_arr(char **arr)
 	return (NULL);
 }
 
+void	free_cmd(t_cmd *head_cmd)
+{
+	t_cmd	*cmd_ptr;
+
+	cmd_ptr = head_cmd;
+	while (head_cmd)
+	{
+		cmd_ptr = head_cmd;
+		free(head_cmd->path);
+		free_arr(head_cmd->args);
+		head_cmd = head_cmd->next;
+		free(cmd_ptr);
+	}
+}
+
 char	*aka_strjoin(char const *s1, char const *s2)
 {
 	char	*new_str;

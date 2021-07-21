@@ -45,6 +45,7 @@ int		words_count(const char *s, char delimiter);
 
 char	*aka_strjoin(char const *s1, char const *s2);
 char	**free_arr(char **arr);
+void	free_cmd(t_cmd *head_cmd);
 int		index_char(char *str, char c);
 
 #endif

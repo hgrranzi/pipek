@@ -28,5 +28,7 @@ int	main(int argc, char **argv, char **envp)
 	take_files(argc, argv, files);
 	possible_path = take_env_path(envp);
 	take_commands(argc, argv, &head_cmd, possible_path);
+	free_arr(possible_path);
+	free_cmd(head_cmd);
 	return (0);
 }
