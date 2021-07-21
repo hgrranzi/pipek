@@ -19,7 +19,7 @@
 # define ERR_ARGS "Too few arguments\n"
 # define INFILE 0
 # define OUTFILE 1
-# define CURRENT_DIR "./"
+# define CURRENT_DIR "."
 
 typedef struct s_cmd
 {
@@ -36,6 +36,7 @@ void	take_files(int argc, char **argv, char **files);
 char	**take_env_path(char **envp);
 void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path);
 char	*take_cmd_path(char *cmd_with_args, char **possible_path);
+char	*check_cmd_path(char *cmd_name, char **possible_path);
 char	**take_cmd_args(char *cmd_with_args);
 
 char	**split_line(char *s, char c);

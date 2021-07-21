@@ -18,29 +18,40 @@ char	**take_cmd_args(char *cmd_with_args)
 	return (cmd_args);
 }
 
-char	*take_cmd_path(char *cmd_with_args, char **possible_path)
+char	*check_cmd_path(char *cmd_name, char **possible_path)
 {
 	int		i;
-	int		cmd_len;
-	char	*cmd_name;
 	char	*cmd_path;
 
-	cmd_len = index_char(cmd_with_args, ' ');
-	cmd_name = strndup(cmd_with_args, cmd_len);
-	if (!cmd_name)
-		error_and_exit(NULL);
 	i = 0;
 	while (possible_path[i])
 	{
 		cmd_path = aka_strjoin(possible_path[i], cmd_name);
 		if (!cmd_path)
 			error_and_exit(NULL);
-		if (access(cmd_path, F_OK))
+		if (access(cmd_path, F_OK) == 0)
 			break ;
 		else
-			free(cmd_path); // no need to verify and the last one
+			free(cmd_path);
 		i++;
 	}
+	return (cmd_path);
+}
+
+char	*take_cmd_path(char *cmd_with_args, char **possible_path)
+{
+	int		cmd_len;
+	char	*cmd_name_tmp;
+	char	*cmd_name;
+	char	*cmd_path;
+
+	cmd_len = index_char(cmd_with_args, ' ');
+	cmd_name_tmp = strndup(cmd_with_args, cmd_len);
+	cmd_name = aka_strjoin("/", cmd_name_tmp);
+	free(cmd_name_tmp);
+	if (!cmd_name)
+		error_and_exit(NULL);
+	cmd_path = check_cmd_path(cmd_name, possible_path);
 	free(cmd_name);
 	return (cmd_path);
 }
