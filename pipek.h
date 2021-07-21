@@ -20,6 +20,7 @@
 # define INFILE 0
 # define OUTFILE 1
 # define CURRENT_DIR "./"
+
 typedef struct s_cmd
 {
 	char			*path;
@@ -37,6 +38,12 @@ void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path
 char	*take_cmd_path(char *cmd_with_args, char **possible_path);
 char	**take_cmd_args(char *cmd_with_args);
 
-int		index_space(char *str);
+char	**split_line(char *s, char c);
+char	*trim_line(char *s, char c);
+int		words_count(const char *s, char delimiter);
+
+char	*aka_strjoin(char const *s1, char const *s2);
+char	**free_arr(char **arr);
+int		index_char(char *str, char c);
 
 #endif

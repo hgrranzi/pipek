@@ -11,8 +11,8 @@ char	**take_cmd_args(char *cmd_with_args)
 	int		args_start;
 	char	**cmd_args;
 
-	args_start = index_space(cmd_with_args);
-	cmd_args = aka_split(&cmd_with_args[args_start], ' ');
+	args_start = index_char(cmd_with_args, ' ');
+	cmd_args = split_line(&cmd_with_args[args_start], ' ');
 	if (!cmd_args)
 		error_and_exit(NULL);
 	return (cmd_args);
@@ -25,7 +25,7 @@ char	*take_cmd_path(char *cmd_with_args, char **possible_path)
 	char	*cmd_name;
 	char	*cmd_path;
 
-	cmd_len = index_space(cmd_with_args);
+	cmd_len = index_char(cmd_with_args, ' ');
 	cmd_name = strndup(cmd_with_args, cmd_len);
 	if (!cmd_name)
 		error_and_exit(NULL);
@@ -80,7 +80,7 @@ char	**take_env_path(char **envp)
 	{
 		if (strncmp(envp[i], "PATH=", 5) == 0)
 		{
-			env_path = aka_split(&envp[i][5], ':');
+			env_path = split_line(&envp[i][5], ':');
 			if (!env_path)
 				error_and_exit(NULL);
 			break ;
@@ -89,7 +89,7 @@ char	**take_env_path(char **envp)
 	}
 	if (!env_path)
 	{
-		env_path = aka_split(CURRENT_DIR, ':');
+		env_path = split_line(CURRENT_DIR, ':');
 		if (!env_path)
 			error_and_exit(NULL);
 	}

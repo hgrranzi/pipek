@@ -27,6 +27,6 @@ int	main(int argc, char **argv, char **envp)
 	head_cmd = NULL;
 	take_files(argc, argv, files);
 	possible_path = take_env_path(envp);
-	take_commands(argc, argv, &head_cmd, possible_path); // instead of envp need a function that takes the PATH and split it
+	take_commands(argc, argv, &head_cmd, possible_path);
 	return (0);
 }
