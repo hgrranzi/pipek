@@ -19,7 +19,7 @@
 # define ERR_ARGS "Too few arguments\n"
 # define INFILE 0
 # define OUTFILE 1
-
+# define CURRENT_DIR "./"
 typedef struct	s_cmd
 {
 	char			*path;

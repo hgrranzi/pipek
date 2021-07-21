@@ -95,6 +95,33 @@ char	**take_cmd_args(char *cmd_with_args)
 	}
 }
 
+char	**take_env_path(char **envp)
+{
+	int		i;
+	char	**env_path;
+
+	i = 0;
+	env_path = NULL;
+	while (envp[i])
+	{
+		if (strncmp(envp[i], "PATH=", 5) == 0)
+		{
+			env_path = aka_split(&envp[i][5], ':');
+			if (!env_path)
+				error_and_exit(NULL);
+			break ;
+		}
+		i++;
+	}
+	if (!env_path)
+	{
+		env_path = aka_split(CURRENT_DIR, ':');
+		if (!env_path)
+			error_and_exit(NULL);
+	}
+	return (env_path);
+}
+
 void	take_files(int argc, char **argv, char **files)
 {
 	if (argc < 5)
@@ -112,6 +139,6 @@ int	main(int argc, char **argv, char **envp)
 	head_cmd = NULL;
 	take_files(argc, argv, files);
 	possible_path = take_env_path(envp);
-	take_commands(argc, argv, &head_cmd, envp); // instead of envp need a function that takes the PATH and split it
+	take_commands(argc, argv, &head_cmd, possible_path); // instead of envp need a function that takes the PATH and split it
 	return (0);
 }
