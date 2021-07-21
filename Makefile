@@ -2,7 +2,7 @@ NAME = pipek
 
 COMPILE = gcc # -Wall -Wextra -Werror
 
-SRCS = main.c
+SRCS = main.c take_data.c utils.c
 
 OBJS =	$(SRCS:.c=.o)
 
