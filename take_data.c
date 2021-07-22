@@ -12,7 +12,7 @@ char	**take_cmd_args(char *cmd_with_args)
 	char	**cmd_args;
 
 	args_start = index_char(cmd_with_args, ' ');
-	cmd_args = split_line(&cmd_with_args[args_start], ' ');
+	cmd_args = split_line(cmd_with_args, ' ');
 	if (!cmd_args)
 		error_and_exit(NULL);
 	return (cmd_args);

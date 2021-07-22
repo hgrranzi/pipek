@@ -20,6 +20,7 @@
 # define INFILE 0
 # define OUTFILE 1
 # define CURRENT_DIR "."
+# define IS_CHILD 0
 
 typedef struct s_cmd
 {
@@ -38,6 +39,8 @@ void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path
 char	*take_cmd_path(char *cmd_with_args, char **possible_path);
 char	*check_cmd_path(char *cmd_name, char **possible_path);
 char	**take_cmd_args(char *cmd_with_args);
+
+int		exec_commands(t_cmd **head_cmd, char **envp);
 
 char	**split_line(char *s, char c);
 char	*trim_line(char *s, char c);
