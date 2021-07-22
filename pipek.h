@@ -20,11 +20,11 @@
 # define INFILE 0
 # define OUTFILE 1
 # define CURRENT_DIR "."
+# define CMD_PATH 0
 # define IS_CHILD 0
 
 typedef struct s_cmd
 {
-	char			*path;
 	char			**args;
 	int				fd[2];
 	struct s_cmd	*next;

@@ -8,10 +8,8 @@
 
 char	**take_cmd_args(char *cmd_with_args)
 {
-	int		args_start;
 	char	**cmd_args;
 
-	args_start = index_char(cmd_with_args, ' ');
 	cmd_args = split_line(cmd_with_args, ' ');
 	if (!cmd_args)
 		error_and_exit(NULL);
@@ -38,21 +36,18 @@ char	*check_cmd_path(char *cmd_name, char **possible_path)
 	return (cmd_path);
 }
 
-char	*take_cmd_path(char *cmd_with_args, char **possible_path)
+char	*take_cmd_path(char *first_arg, char **possible_path)
 {
 	int		cmd_len;
-	char	*cmd_name_tmp;
 	char	*cmd_name;
 	char	*cmd_path;
 
-	cmd_len = index_char(cmd_with_args, ' ');
-	cmd_name_tmp = strndup(cmd_with_args, cmd_len);
-	cmd_name = aka_strjoin("/", cmd_name_tmp);
-	free(cmd_name_tmp);
+	cmd_name = aka_strjoin("/", first_arg);
 	if (!cmd_name)
 		error_and_exit(NULL);
 	cmd_path = check_cmd_path(cmd_name, possible_path);
 	free(cmd_name);
+	free(first_arg);
 	return (cmd_path);
 }
 
@@ -70,8 +65,8 @@ void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path
 		new_cmd = malloc(sizeof(t_cmd));
 		if (!new_cmd)
 			error_and_exit(NULL);
-		new_cmd->path = take_cmd_path(argv[i], possible_path);
 		new_cmd->args = take_cmd_args(argv[i]);
+		new_cmd->args[CMD_PATH] = take_cmd_path(new_cmd->args[0], possible_path);
 		new_cmd->fd[0] = 0;
 		new_cmd->fd[1] = 1;
 		new_cmd->next = NULL;

@@ -43,7 +43,6 @@ void	free_cmd(t_cmd *head_cmd)
 	while (head_cmd)
 	{
 		cmd_ptr = head_cmd;
-		free(head_cmd->path);
 		free_arr(head_cmd->args);
 		head_cmd = head_cmd->next;
 		free(cmd_ptr);

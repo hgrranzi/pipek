@@ -17,7 +17,7 @@ int	exec_commands(t_cmd **head_cmd, char **envp)
 		pid = fork();
 		if (pid == IS_CHILD)
 		{
-			execve(head_cmd_p->path, head_cmd_p->args, envp);
+			execve(head_cmd_p->args[CMD_PATH], head_cmd_p->args, envp);
 			error_and_exit(NULL);
 		}
 		else
