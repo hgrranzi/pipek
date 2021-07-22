@@ -16,7 +16,8 @@
 # include <stdio.h>
 # include <errno.h>
 
-# define ERR_ARGS "Too few arguments\n"
+# define ERR_ARGS "Too few arguments"
+# define ERR_CMD "command not found"
 # define INFILE 0
 # define OUTFILE 1
 # define CURRENT_DIR "."
@@ -31,10 +32,11 @@ typedef struct s_cmd
 
 }				t_cmd;
 
-void	error_and_exit(char *error_message);
+void	error_and_exit(char *reason, char *error_message, int end);
 
 void	take_files(int argc, char **argv, char **files);
 char	**take_env_path(char **envp);
+char	**update_path(char **env_path);
 void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path);
 char	*take_cmd_path(char *cmd_with_args, char **possible_path);
 char	*check_cmd_path(char *cmd_name, char **possible_path);

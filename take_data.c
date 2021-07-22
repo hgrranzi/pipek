@@ -12,8 +12,26 @@ char	**take_cmd_args(char *cmd_with_args)
 
 	cmd_args = split_line(cmd_with_args, ' ');
 	if (!cmd_args)
-		error_and_exit(NULL);
+		error_and_exit(NULL, NULL, 1);
 	return (cmd_args);
+}
+
+char	**update_path(char **env_path)
+{
+	int		i;
+	char	*new_path;
+
+	i = 0;
+	while(env_path[i])
+	{
+		new_path = aka_strjoin(env_path[i], "/");
+		if (!new_path)
+			error_and_exit(NULL, NULL, 1);
+		free(env_path[i]);
+		env_path[i] = new_path;
+		i++;
+	}
+	return (env_path);
 }
 
 char	*check_cmd_path(char *cmd_name, char **possible_path)
@@ -26,28 +44,32 @@ char	*check_cmd_path(char *cmd_name, char **possible_path)
 	{
 		cmd_path = aka_strjoin(possible_path[i], cmd_name);
 		if (!cmd_path)
-			error_and_exit(NULL);
-		if (possible_path[i + 1] == NULL || access(cmd_path, F_OK) == 0)
+			error_and_exit(NULL, NULL, 1);
+		if (access(cmd_path, F_OK) == 0)
 			break ;
 		else
 			free(cmd_path);
 		i++;
 	}
+	if (possible_path[i] == NULL)
+	{
+		error_and_exit(cmd_name, ERR_CMD, 0);
+		cmd_path = NULL;
+	}
 	return (cmd_path);
 }
 
-char	*take_cmd_path(char *first_arg, char **possible_path)
+char	*take_cmd_path(char *cmd_name, char **possible_path)
 {
-	int		cmd_len;
-	char	*cmd_name;
 	char	*cmd_path;
 
-	cmd_name = aka_strjoin("/", first_arg);
-	if (!cmd_name)
-		error_and_exit(NULL);
-	cmd_path = check_cmd_path(cmd_name, possible_path);
-	free(cmd_name);
-	free(first_arg);
+	if (strchr(cmd_name, '/'))
+		cmd_path = cmd_name;
+	else
+	{
+		cmd_path = check_cmd_path(cmd_name, possible_path);
+		free(cmd_name);
+	}
 	return (cmd_path);
 }
 
@@ -64,7 +86,7 @@ void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path
 	{
 		new_cmd = malloc(sizeof(t_cmd));
 		if (!new_cmd)
-			error_and_exit(NULL);
+			error_and_exit(NULL, NULL, 1);
 		new_cmd->args = take_cmd_args(argv[i]);
 		new_cmd->args[CMD_PATH] = take_cmd_path(new_cmd->args[0], possible_path);
 		new_cmd->fd[0] = 0;
@@ -88,7 +110,7 @@ char	**take_env_path(char **envp)
 		{
 			env_path = split_line(&envp[i][5], ':');
 			if (!env_path)
-				error_and_exit(NULL);
+				error_and_exit(NULL, NULL, 1);
 			break ;
 		}
 		i++;
@@ -97,15 +119,15 @@ char	**take_env_path(char **envp)
 	{
 		env_path = split_line(CURRENT_DIR, ':');
 		if (!env_path)
-			error_and_exit(NULL);
+			error_and_exit(NULL, NULL, 1);
 	}
-	return (env_path);
+	return (update_path(env_path));
 }
 
 void	take_files(int argc, char **argv, char **files)
 {
 	if (argc < 5)
-		error_and_exit(ERR_ARGS);
+		error_and_exit(NULL, ERR_ARGS, 1);
 	files[INFILE] = argv[1];
 	files[OUTFILE] = argv[argc - 1];
 }

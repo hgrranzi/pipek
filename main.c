@@ -6,16 +6,23 @@
 
 #include "pipek.h"
 
-void	error_and_exit(char *error_message)
+void	error_and_exit(char *reason, char *error_message, int end)
 {
 	char	*system_message;
 
 	system_message = strerror(errno);
+	if (reason)
+	{
+		write(2, reason, strlen(reason));
+		write(2, ": ", 2);
+	}
 	if (error_message)
 		write(2, error_message, strlen(error_message));
 	else
 		write(2, system_message, strlen(system_message));
-	exit(0);
+	write(2, "\n", 1);
+	if (end)
+		exit(0);
 }
 
 int	main(int argc, char **argv, char **envp)
