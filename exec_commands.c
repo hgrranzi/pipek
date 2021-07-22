@@ -12,7 +12,7 @@ int	exec_commands(t_cmd **head_cmd, char **envp)
 	pid_t	pid;
 
 	head_cmd_p = *head_cmd;
-	while(head_cmd_p)
+	while (head_cmd_p)
 	{
 		pid = fork();
 		if (pid == IS_CHILD)

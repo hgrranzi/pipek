@@ -22,7 +22,7 @@ char	**update_path(char **env_path)
 	char	*new_path;
 
 	i = 0;
-	while(env_path[i])
+	while (env_path[i])
 	{
 		new_path = aka_strjoin(env_path[i], "/");
 		if (!new_path)
