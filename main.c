@@ -13,14 +13,14 @@ void	error_and_exit(char *reason, char *error_message, int end)
 	system_message = strerror(errno);
 	if (reason)
 	{
-		write(2, reason, strlen(reason));
-		write(2, ": ", 2);
+		write(STDERR_FILENO, reason, strlen(reason));
+		write(STDERR_FILENO, ": ", 2);
 	}
 	if (error_message)
-		write(2, error_message, strlen(error_message));
+		write(STDERR_FILENO, error_message, strlen(error_message));
 	else
-		write(2, system_message, strlen(system_message));
-	write(2, "\n", 1);
+		write(STDERR_FILENO, system_message, strlen(system_message));
+	write(STDERR_FILENO, "\n", 1);
 	if (end)
 		exit(0);
 }
@@ -33,6 +33,7 @@ int	main(int argc, char **argv, char **envp)
 
 	head_cmd = NULL;
 	take_files(argc, argv, files);
+
 	possible_path = take_env_path(envp);
 	take_commands(argc, argv, &head_cmd, possible_path);
 	free_arr(possible_path);
