@@ -25,18 +25,28 @@ void	error_and_exit(char *reason, char *error_message, int end)
 		exit(0);
 }
 
+void	open_files(char **files, t_cmd *head_cmd)
+{
+	head_cmd->fd[INFILE] = open(files[INFILE], O_RDONLY);
+	if (head_cmd->fd[INFILE] == -1)
+		error_and_exit(files[INFILE], NULL, 0);
+	head_cmd->fd[OUTFILE] = open(files[OUTFILE], O_CREAT | O_RDWR | O_TRUNC, 0666);
+	if (head_cmd->fd[OUTFILE] == -1)
+		error_and_exit(files[OUTFILE], NULL, 0);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char	*files[2];
 	t_cmd	*head_cmd;
 	char	**possible_path;
 
-	head_cmd = NULL;
+	head_cmd = NULL; // init?
 	take_files(argc, argv, files);
-
 	possible_path = take_env_path(envp);
 	take_commands(argc, argv, &head_cmd, possible_path);
 	free_arr(possible_path);
+	open_files(files, head_cmd);
 	exec_commands(&head_cmd, envp);
 	free_cmd(head_cmd);
 	return (0);
