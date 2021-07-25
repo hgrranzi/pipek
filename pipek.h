@@ -20,6 +20,8 @@
 # define ERR_CMD "command not found"
 # define INFILE 0
 # define OUTFILE 1
+# define IN 0
+# define OUT 1
 # define CURRENT_DIR "."
 # define CMD_PATH 0
 # define IS_CHILD 0
