@@ -59,11 +59,6 @@ int	**init_pipes(int cmd_count)
 	return (pipe_fd);
 }
 
-void	kill_the_others()
-{
-	return ;
-}
-
 void	wait_and_close(pid_t *pid, int **pipe_fd, int cmd_count)
 {
 	int	i;
@@ -89,22 +84,15 @@ int	create_processes(t_cmd **head_cmd, int cmd_count, pid_t *pid, int **pipe_fd)
 	i = 0;
 	while (i < cmd_count)
 	{
-		if (pid[i] != IS_CHILD)
-			pid[i] = fork();
+		pid[i] = fork();
 		if (pid[i] == -1)
-		{
-			kill_the_others();
-			error_and_exit(NULL, NULL, 1);
-		}
+			error_and_exit(NULL, NULL, 0);
 		if (pid[i] == IS_CHILD)
 		{
 			close_unused_pipe_fd(pipe_fd, i, cmd_count);
 			duplicate_fd(head_cmd_p->fd, i);
 			if (head_cmd_p->args[CMD_PATH])
-			{
 				execve(head_cmd_p->args[CMD_PATH], head_cmd_p->args, NULL);
-				error_and_exit(head_cmd_p->args[CMD_PATH], NULL, 1); // not here
-			}
 			return (0);
 		}
 		head_cmd_p = head_cmd_p->next;
