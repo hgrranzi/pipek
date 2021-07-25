@@ -89,8 +89,8 @@ void	take_commands(int argc, char **argv, t_cmd **head_cmd, char **possible_path
 			error_and_exit(NULL, NULL, 1);
 		new_cmd->args = take_cmd_args(argv[i]);
 		new_cmd->args[CMD_PATH] = take_cmd_path(new_cmd->args[0], possible_path);
-		new_cmd->fd[0] = 0;
-		new_cmd->fd[1] = 1;
+		new_cmd->fd[0] = STDIN_FILENO;
+		new_cmd->fd[1] = STDOUT_FILENO;
 		new_cmd->next = NULL;
 		*tail_cmd = new_cmd;
 		tail_cmd = &new_cmd->next;
