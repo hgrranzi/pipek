@@ -64,28 +64,6 @@ void	kill_the_others()
 	return ;
 }
 
-void	close_unused_pipes(int **pipe_fd, int i, int cmd_count)
-{
-	int	j;
-
-	j = 0;
-	while (j < cmd_count - 1)
-	{
-		if (j != i - 1)
-			close(pipe_fd[j][IN]);
-		if (j != i)
-			close(pipe_fd[j][OUT]);
-		j++;
-	}
-}
-
-void	duplicate_fd(int *fd, int i)
-{
-	dup2(fd[IN], STDIN_FILENO);
-	dup2(fd[OUT], STDOUT_FILENO);
-	return ;
-}
-
 void	wait_and_close(pid_t *pid, int **pipe_fd, int cmd_count)
 {
 	int	i;
@@ -100,13 +78,12 @@ void	wait_and_close(pid_t *pid, int **pipe_fd, int cmd_count)
 			close(pipe_fd[i][OUT]);
 		i++;
 	}
-
 }
 
 int	create_processes(t_cmd **head_cmd, int cmd_count, pid_t *pid, int **pipe_fd)
 {
 	t_cmd	*head_cmd_p;
-	int	i;
+	int		i;
 
 	head_cmd_p = *head_cmd;
 	i = 0;
@@ -121,7 +98,7 @@ int	create_processes(t_cmd **head_cmd, int cmd_count, pid_t *pid, int **pipe_fd)
 		}
 		if (pid[i] == IS_CHILD)
 		{
-			close_unused_pipes(pipe_fd, i, cmd_count);
+			close_unused_pipe_fd(pipe_fd, i, cmd_count);
 			duplicate_fd(head_cmd_p->fd, i);
 			if (head_cmd_p->args[CMD_PATH])
 			{
@@ -133,32 +110,7 @@ int	create_processes(t_cmd **head_cmd, int cmd_count, pid_t *pid, int **pipe_fd)
 		head_cmd_p = head_cmd_p->next;
 		i++;
 	}
-	wait_and_close(pid, pipe_fd, cmd_count);
 	return (0);
-}
-
-void	distribute_fd(t_cmd **head_cmd, int **pipe_fd)
-{
-	t_cmd	*head_cmd_p;
-	int		i;
-
-	head_cmd_p = *head_cmd;
-	i = 0;
-	while (head_cmd_p)
-	{
-		if (i > 0)
-		{
-			if (head_cmd_p->fd[IN] == STDIN_FILENO)
-				head_cmd_p->fd[IN] = pipe_fd[i - 1][IN];
-		}
-		if (head_cmd_p->next != NULL)
-		{
-			if (head_cmd_p->fd[OUT] == STDOUT_FILENO)
-				head_cmd_p->fd[OUT] = pipe_fd[i][OUT];
-		}
-		head_cmd_p = head_cmd_p->next;
-		i++;
-	}
 }
 
 int	exec_commands(t_cmd **head_cmd)
@@ -172,5 +124,6 @@ int	exec_commands(t_cmd **head_cmd)
 	pipe_fd = init_pipes(cmd_count);
 	distribute_fd(head_cmd, pipe_fd);
 	create_processes(head_cmd, cmd_count, pid, pipe_fd);
+	wait_and_close(pid, pipe_fd, cmd_count);
 	return (0);
 }

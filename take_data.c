@@ -123,11 +123,3 @@ char	**take_env_path(char **envp)
 	}
 	return (update_path(env_path));
 }
-
-void	take_files(int argc, char **argv, char **files)
-{
-	if (argc < 5)
-		error_and_exit(NULL, ERR_ARGS, 1);
-	files[INFILE] = argv[1];
-	files[OUTFILE] = argv[argc - 1];
-}

@@ -25,21 +25,6 @@ void	error_and_exit(char *reason, char *error_message, int end)
 		exit(0);
 }
 
-void	open_files(char **files, t_cmd **head_cmd)
-{
-	t_cmd	*head_cmd_p;
-
-	head_cmd_p = *head_cmd;
-	head_cmd_p->fd[INFILE] = open(files[INFILE], O_RDONLY);
-	if (head_cmd_p->fd[INFILE] == -1)
-		error_and_exit(files[INFILE], NULL, 0);
-	while (head_cmd_p->next)
-		head_cmd_p = head_cmd_p->next;
-	head_cmd_p->fd[OUTFILE] = open(files[OUTFILE], O_CREAT | O_RDWR | O_TRUNC, 0666);
-	if (head_cmd_p->fd[OUTFILE] == -1)
-		error_and_exit(files[OUTFILE], NULL, 0);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char	*files[2];
