@@ -42,7 +42,7 @@ char	*take_cmd_path(char *cmd_with_args, char **possible_path);
 char	*check_cmd_path(char *cmd_name, char **possible_path);
 char	**take_cmd_args(char *cmd_with_args);
 
-int		exec_commands(t_cmd **head_cmd, char **envp);
+int		exec_commands(t_cmd **head_cmd);
 
 char	**split_line(char *s, char c);
 char	*trim_line(char *s, char c);
