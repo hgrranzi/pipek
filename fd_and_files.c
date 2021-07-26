@@ -68,7 +68,7 @@ void	close_unused_pipe_fd(int **pipe_fd, int i, int cmd_count)
 	}
 }
 
-void	duplicate_fd(int *fd, int i)
+void	duplicate_fd(int *fd)
 {
 	dup2(fd[IN], STDIN_FILENO);
 	dup2(fd[OUT], STDOUT_FILENO);

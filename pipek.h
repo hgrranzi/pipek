@@ -36,7 +36,7 @@ void	take_files(int argc, char **argv, char **files);
 void	open_files(char **files, t_cmd **head_cmd);
 void	distribute_fd(t_cmd **head_cmd, int **pipe_fd);
 void	close_unused_pipe_fd(int **pipe_fd, int i, int cmd_count);
-void	duplicate_fd(int *fd, int i);
+void	duplicate_fd(int *fd);
 
 char	**take_env_path(char **envp);
 char	**update_path(char **env_path);

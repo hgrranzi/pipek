@@ -90,7 +90,7 @@ int	create_processes(t_cmd **head_cmd, int cmd_count, pid_t *pid, int **pipe_fd)
 		if (pid[i] == IS_CHILD)
 		{
 			close_unused_pipe_fd(pipe_fd, i, cmd_count);
-			duplicate_fd(head_cmd_p->fd, i);
+			duplicate_fd(head_cmd_p->fd);
 			if (head_cmd_p->args[CMD_PATH] && head_cmd_p->fd[IN] != -1 && head_cmd_p->fd[OUT] != -1)
 				execve(head_cmd_p->args[CMD_PATH], head_cmd_p->args, NULL);
 			return (0);
