@@ -18,8 +18,6 @@
 
 # define ERR_ARGS "Too few arguments"
 # define ERR_CMD "command not found"
-# define INFILE 0
-# define OUTFILE 1
 # define IN 0
 # define OUT 1
 # define CURRENT_DIR "."

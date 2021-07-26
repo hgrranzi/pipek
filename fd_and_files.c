@@ -10,8 +10,8 @@ void	take_files(int argc, char **argv, char **files)
 {
 	if (argc < 5)
 		error_and_exit(NULL, ERR_ARGS, 1);
-	files[INFILE] = argv[1];
-	files[OUTFILE] = argv[argc - 1];
+	files[IN] = argv[1];
+	files[OUT] = argv[argc - 1];
 }
 
 void	open_files(char **files, t_cmd **head_cmd)
@@ -19,14 +19,14 @@ void	open_files(char **files, t_cmd **head_cmd)
 	t_cmd	*head_cmd_p;
 
 	head_cmd_p = *head_cmd;
-	head_cmd_p->fd[INFILE] = open(files[INFILE], O_RDONLY);
-	if (head_cmd_p->fd[INFILE] == -1)
-		error_and_exit(files[INFILE], NULL, 0);
+	head_cmd_p->fd[IN] = open(files[IN], O_RDONLY);
+	if (head_cmd_p->fd[IN] == -1)
+		error_and_exit(files[IN], NULL, 0);
 	while (head_cmd_p->next)
 		head_cmd_p = head_cmd_p->next;
-	head_cmd_p->fd[OUTFILE] = open(files[OUTFILE], O_CREAT | O_RDWR | O_TRUNC, 0666);
-	if (head_cmd_p->fd[OUTFILE] == -1)
-		error_and_exit(files[OUTFILE], NULL, 0);
+	head_cmd_p->fd[OUT] = open(files[OUT], O_CREAT | O_RDWR | O_TRUNC, 0666);
+	if (head_cmd_p->fd[OUT] == -1)
+		error_and_exit(files[OUT], NULL, 0);
 }
 
 void	distribute_fd(t_cmd **head_cmd, int **pipe_fd)
