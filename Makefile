@@ -1,6 +1,6 @@
 NAME = pipek
 
-COMPILE = gcc # -Wall -Wextra -Werror
+COMPILE = gcc -Wall -Wextra -Werror
 
 SRCS = main.c take_data.c utils.c split_line.c exec_commands.c fd_and_files.c
 
